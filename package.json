@@ -5,15 +5,16 @@
   "main": "index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "start:watch": "ts-node-dev dev/watch.ts",
     "build": "tsc",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "prepare" : "npm run build",
-    "prepublishOnly" : "npm test && npm run lint",
-    "preversion" : "npm run lint",
-    "version" : "npm run format && git add -A src",
-    "postversion" : "git push && git push --tags"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "terminal-kit": "^1.32.2"
   },
   "devDependencies": {
+    "@types/terminal-kit": "^1.28.0",
     "@types/jest": "^24.0.24",
     "@types/node": "^13.1.0",
     "jest": "^24.9.0",
