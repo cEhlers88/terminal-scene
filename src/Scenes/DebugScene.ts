@@ -10,7 +10,7 @@ export default class extends AbstractScene {
         return "DebugScene";
     }
     public init(): void {
-        this.bgColor={r:255,g:255,b:255}
+        this.setBackColor({r:255,g:255,b:255});
     }
 
 
