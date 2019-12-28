@@ -1,7 +1,7 @@
 import * as terminalKit from "terminal-kit";
-import {IPadding, IRect, IrgbValue} from "./lib/interfaces";
 import {drawContainerBox} from "./_core/utils";
 import {eBorderStyle} from "./lib/enums";
+import {IPadding, IRect, IRgbValue} from "./lib/interfaces";
 
 export default abstract class AbstractScene {
   protected data: any = {};
@@ -17,16 +17,16 @@ export default abstract class AbstractScene {
   public draw(): AbstractScene{
     if(this.getIsVisible()){
       drawContainerBox(this.dimension.x,this.dimension.y,this.dimension.w,this.dimension.h,{
-        color:(this.getBorderStyle()===eBorderStyle.none?this.getBackColor():this.getBorderColor()),
-        filled:true,
+        bgColor:this.getBackColor(),
         bgColorContainer:{r:0,g:0,b:0},
-        bgColor:this.getBackColor()
+        color:(this.getBorderStyle()===eBorderStyle.none?this.getBackColor():this.getBorderColor()),
+        filled:true
       });
     }
     return this;
   }
-  public getBackColor():IrgbValue{return this.getData('_backColor',{r:30,g:30,b:30})}
-  public getBorderColor():IrgbValue{return this.getData('_borderColor',{r:70,g:70,b:70})}
+  public getBackColor():IRgbValue{return this.getData('_backColor',{r:30,g:30,b:30})}
+  public getBorderColor():IRgbValue{return this.getData('_borderColor',{r:70,g:70,b:70})}
   public getBorderStyle():eBorderStyle{
     return this.getData('_borderStyle',eBorderStyle.none);
   }
@@ -36,10 +36,10 @@ export default abstract class AbstractScene {
   public getDrawArea():IRect{
     const padding=this.getPadding();
     return {
-      x:this.dimension.x+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.left,
-      y:this.dimension.y+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.top,
       h:this.dimension.h-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.top-padding.bottom,
-      w:this.dimension.w-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.left-padding.right
+      w:this.dimension.w-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.left-padding.right,
+      x:this.dimension.x+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.left,
+      y:this.dimension.y+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.top
     }
   }
   public getIsVisible():boolean{
@@ -56,8 +56,8 @@ export default abstract class AbstractScene {
   public log(message: any): void {
     this.logHandle(message);
   }
-  public setBackColor(newValue:IrgbValue){this.setData('_backColor',newValue);}
-  public setBorderColor(newValue:IrgbValue){this.setData('_borderColor',newValue);}
+  public setBackColor(newValue:IRgbValue){this.setData('_backColor',newValue);}
+  public setBorderColor(newValue:IRgbValue){this.setData('_borderColor',newValue);}
   public setBorderStyle(newValue:eBorderStyle):AbstractScene{
     this.setData('_borderStyle',newValue);
     return this;

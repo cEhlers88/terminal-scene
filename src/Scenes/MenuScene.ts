@@ -1,18 +1,18 @@
-import AbstractScene from "../AbstractScene";
-import {IPadding, IrgbValue} from "../lib/interfaces";
 import {fixStringSizeValue} from "../_core/utils";
+import AbstractScene from "../AbstractScene";
+import {IPadding, IRgbValue} from "../lib/interfaces";
 
 interface IMenuitem {
-    bgColor?:IrgbValue,
-    color?:IrgbValue,
+    bgColor?:IRgbValue,
+    color?:IRgbValue,
     text:string
 }
 
 export default class MenuScene extends AbstractScene{
     protected activeMenuIndex:number=0;
-    protected bgColorActiveItem:IrgbValue={r:250,g:150,b:0};
-    protected colorActiveItem:IrgbValue={r:50,g:50,b:50};
-    protected colorItem:IrgbValue={r:250,g:250,b:250};
+    protected bgColorActiveItem:IRgbValue={r:250,g:150,b:0};
+    protected colorActiveItem:IRgbValue={r:50,g:50,b:50};
+    protected colorItem:IRgbValue={r:230,g:230,b:230};
 
     public addItem(newItem:IMenuitem):MenuScene{
         const items = this.getItems();
@@ -26,23 +26,23 @@ export default class MenuScene extends AbstractScene{
             super.draw();
             items.map((Menuitem:IMenuitem,index:number)=>{
                 const {bgR,bgG,bgB,fcR,fcG,fcB} = (index===self.activeMenuIndex?{
-                    bgR: self.bgColorActiveItem.r,
-                    bgG: self.bgColorActiveItem.g,
                     bgB: self.bgColorActiveItem.b,
-                    fcR: self.colorActiveItem.r,
+                    bgG: self.bgColorActiveItem.g,
+                    bgR: self.bgColorActiveItem.r,
+                    fcB: self.colorActiveItem.b,
                     fcG: self.colorActiveItem.g,
-                    fcB: self.colorActiveItem.b
+                    fcR: self.colorActiveItem.r
                 }:{
-                    bgR:(Menuitem.bgColor?Menuitem.bgColor.r:self.getBackColor().r),
-                    bgG:(Menuitem.bgColor?Menuitem.bgColor.g:self.getBackColor().g),
                     bgB:(Menuitem.bgColor?Menuitem.bgColor.b:self.getBackColor().b),
-                    fcR:(Menuitem.color?Menuitem.color.r:self.colorItem.r),
+                    bgG:(Menuitem.bgColor?Menuitem.bgColor.g:self.getBackColor().g),
+                    bgR:(Menuitem.bgColor?Menuitem.bgColor.r:self.getBackColor().r),
+                    fcB:(Menuitem.color?Menuitem.color.b:self.colorItem.b),
                     fcG:(Menuitem.color?Menuitem.color.g:self.colorItem.g),
-                    fcB:(Menuitem.color?Menuitem.color.b:self.colorItem.b)
+                    fcR:(Menuitem.color?Menuitem.color.r:self.colorItem.r)
                 });
                 self.term.moveTo(self.getDrawArea().x,self.getDrawArea().y+index).
                 bgColorRgb(bgR,bgG,bgB).
-                colorRgb(fcR,fcG,fcB,fixStringSizeValue(Menuitem.text,self.getDrawArea().w))
+                colorRgb(fcR,fcG,fcB,fixStringSizeValue((this.activeMenuIndex===index?'\u25c9':'\u25cb')+' '+Menuitem.text,self.getDrawArea().w))
             });
         }
         return this;
@@ -69,5 +69,7 @@ export default class MenuScene extends AbstractScene{
         return this;
     }
 
-    init(): void {}
+    public init(): void {
+        // dummy
+    }
 }

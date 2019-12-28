@@ -1,7 +1,7 @@
 import * as terminalKit from 'terminal-kit';
-import AbstractScene from './AbstractScene';
-import {IrgbValue} from "./lib/interfaces";
 import {drawContainer} from "./_core/utils";
+import AbstractScene from './AbstractScene';
+import {IRgbValue} from "./lib/interfaces";
 const term = terminalKit.terminal;
 
 enum engineState {
@@ -12,7 +12,7 @@ enum engineState {
 
 export default class Engine{
   private autorun:boolean=false;
-  private bgColor:IrgbValue={r:0,g:0,b:0};
+  private bgColor:IRgbValue={r:0,g:0,b:0};
   private state: engineState = engineState.stoped;
   private needClear: boolean = true;
   private logBuffer:string[]=[];
@@ -55,7 +55,6 @@ export default class Engine{
       this.needClear = false;
     }
     this.debugCount++;
-    //term.moveTo(10,10).green(this.debugCount+ " updates "+this.scenes.length);
   }
 
   private bindEvents(){

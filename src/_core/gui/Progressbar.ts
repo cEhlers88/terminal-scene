@@ -1,10 +1,10 @@
 import Element from "./Element";
 
-class progressbox{
-
+interface IProgressbox{
+    dummy:string
 }
 
 export default class extends Element {
-    private boxes:progressbox[]=[];
+    private boxes:IProgressbox[]=[];
 
 }

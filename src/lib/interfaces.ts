@@ -10,7 +10,7 @@ export interface IRect {
     w:number,
     h:number
 }
-export interface IrgbValue {
+export interface IRgbValue {
     b:number,
     g:number,
     r:number

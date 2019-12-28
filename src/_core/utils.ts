@@ -1,6 +1,6 @@
 import terminalKit from "terminal-kit";
+import {IRgbValue} from "../lib/interfaces";
 import {borderNormal} from "../lib/unicode";
-import {IrgbValue} from "../lib/interfaces";
 const term = terminalKit.terminal;
 
 export const createXChars=(char:string,count:number):string=>{
@@ -8,19 +8,19 @@ export const createXChars=(char:string,count:number):string=>{
     while(result.length<count){result+=char;}
     return result;
 }
-export const drawContainer = (x:number,y:number,w:number,h:number,bgColor:IrgbValue) => {
+export const drawContainer = (x:number,y:number,w:number,h:number,bgColor:IRgbValue) => {
     for(let i:number=1;i<=h;i++){
         term.moveTo(x,y+i-1).bgColorRgb(bgColor.r,bgColor.g,bgColor.b).white(createXChars(" ",w));
     }
 }
 export const drawBox = (x:number,y:number,w:number,h:number,options:{
-    color:IrgbValue,
+    bgColor?:IRgbValue
+    color:IRgbValue,
     filled:boolean,
-    bgColor?:IrgbValue
 }={
+    bgColor:{r:0,g:0,b:0},
     color:{r:200,g:250,b:100},
-    filled:false,
-    bgColor:{r:0,g:0,b:0}
+    filled:false
 }):void => {
     if(!options.bgColor){options.bgColor={r:0,g:0,b:0}}
     term.moveTo(x,y).bgColorRgb(options.bgColor.r,options.bgColor.g,options.bgColor.b)
@@ -39,10 +39,10 @@ export const drawBox = (x:number,y:number,w:number,h:number,options:{
     term.styleReset();
 }
 export const drawContainerBox = (x:number,y:number,w:number,h:number,options:{
-    color:IrgbValue,
+    bgColor?:IRgbValue
+    bgColorContainer?:IRgbValue
+    color:IRgbValue,
     filled:boolean,
-    bgColor?:IrgbValue
-    bgColorContainer?:IrgbValue
 }={
     color:{r:30,g:30,b:30},
     filled:false
@@ -50,9 +50,9 @@ export const drawContainerBox = (x:number,y:number,w:number,h:number,options:{
     const bgColor=(options.bgColor?options.bgColor:{r:0,g:0,b:0});
     drawContainer(x,y,w,h,(options.bgColorContainer?options.bgColorContainer:{r:0,g:0,b:0}));
     drawBox(x+1,y,w-2,h,{
-        filled:options.filled,
+        bgColor,
         color:options.color,
-        bgColor:bgColor
+        filled:options.filled
     });
 }
 export const drawButton=(x:number,y:number,text:string, options:{isActive:boolean, isEnabled:boolean}={
