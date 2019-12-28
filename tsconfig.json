@@ -9,7 +9,7 @@
     "isolatedModules": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "watch": false
+    "watch": true
   },
   "include": ["src"],
   "exclude": [
