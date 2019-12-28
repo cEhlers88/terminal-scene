@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start:watch": "ts-node-dev dev/watch.ts",
+    "start:watch": "ts-node-dev dev/watch.ts --watch",
     "build": "tsc",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -44,7 +44,6 @@
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "ts-jest": "^24.2.0",
-    "ts-node": "^8.5.4",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",

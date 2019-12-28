@@ -4,11 +4,12 @@
     "target": "esnext",
     "sourceMap": false,
     "declaration": true,
-    "outDir": "./dist",
+    "outDir": "./dist/",
     "strict": true,
     "isolatedModules": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "watch": false
   },
   "include": ["src"],
   "exclude": [
