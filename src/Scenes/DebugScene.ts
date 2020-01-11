@@ -1,7 +1,7 @@
 import AnimationScene from "../AnimationScene";
 import {minStringSizeValue} from "../_core/utils";
 
-export default class extends AnimationScene {
+export default class DebugScene extends AnimationScene {
     public animate(): void {
         let removeLastKeyNameCounter = this.DataHandler.getDataSave('removeLastKeyNameCounter',0);
         if(removeLastKeyNameCounter>0){
@@ -13,8 +13,8 @@ export default class extends AnimationScene {
     }
     public draw(): AnimationScene {
         super.draw();
-        this.write(this.dimension.x+3,this.dimension.y,'Plugin: ['+minStringSizeValue( this.DataHandler.getDataSave('pluginname',''),16)+']')
-        this.write(this.dimension.x+1,this.dimension.y+1,'Last key: ['+minStringSizeValue( this.DataHandler.getDataSave('lastKeyName',''),16)+']')
+        this.write(this.getDrawArea().x+3,this.getDrawArea().y,'Plugin: ['+minStringSizeValue( this.DataHandler.getDataSave('pluginname',''),16)+']')
+        this.write(this.getDrawArea().x+1,this.getDrawArea().y+1,'Last key: ['+minStringSizeValue( this.DataHandler.getDataSave('lastKeyName',''),16)+']')
         // @ts-ignore
         const barStyle = this.term.colorRgbHex('#600b08').bgColorRgb(this.getBackColor().r,this.getBackColor().g,this.getBackColor().b);
         // @ts-ignore

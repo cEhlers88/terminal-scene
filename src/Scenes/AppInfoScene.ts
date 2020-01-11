@@ -1,6 +1,6 @@
 import AbstractScene from "../AbstractScene";
 
-export default class extends AbstractScene {
+export default class AppInfoScene extends AbstractScene {
     public handleKeyDown(key: string): Promise<unknown> {
         return new Promise<unknown>((resolve:()=>void)=>{
             resolve();

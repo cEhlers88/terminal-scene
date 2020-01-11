@@ -21,7 +21,8 @@ export default abstract class AbstractScene {
   }
   public draw(): AbstractScene{
     if(this.getIsVisible()){
-      drawContainerBox(this.dimension.x,this.dimension.y,this.dimension.w,this.dimension.h,{
+      const dimension = this.getDimension();
+      drawContainerBox(dimension.x,dimension.y,dimension.w,dimension.h,{
         bgColor:this.getBackColor(),
         bgColorContainer:{r:0,g:0,b:0},
         color:(this.getBorderStyle()===eBorderStyle.none?this.getBackColor():this.getBorderColor()),
@@ -40,16 +41,19 @@ export default abstract class AbstractScene {
   }
   public getDrawArea():IRect{
     const padding=this.getPadding();
+    const dimension = this.getDimension();
     return {
-      h:this.dimension.h-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.top-padding.bottom,
-      w:this.dimension.w-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.left-padding.right,
-      x:this.dimension.x+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.left,
-      y:this.dimension.y+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.top
+      h:dimension.h-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.top-padding.bottom,
+      w:dimension.w-(this.getBorderStyle()!==eBorderStyle.none?2:0)-padding.left-padding.right,
+      x:dimension.x+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.left,
+      y:dimension.y+(this.getBorderStyle()!==eBorderStyle.none?1:0)+padding.top
     }
   }
+  public getDimension():IRect{return this.DataHandler.getDataSave('dimension',{x:-1,y:-1,w:-1,h:-1});}
   public getIsVisible():boolean{
     return this.getData('_visible',true);
   }
+  public abstract get name():string
   public getPadding():IPadding{
     return this.getData('_padding',{bottom:0,left:0,right:0,top:0});
   }
@@ -90,9 +94,6 @@ export default abstract class AbstractScene {
       this.term.moveTo(x,y).bgColorRgb(this.getBackColor().r,this.getBackColor().g,this.getBackColor().b,value);
     }
     return this;
-  }
-  protected get dimension():IRect{
-    return this.DataHandler.getDataSave('dimension',{x:-1,y:-1,w:-1,h:-1});
   }
   private logHandle: CallableFunction = () => null;
 }

@@ -2,19 +2,14 @@ import * as terminalKit from 'terminal-kit';
 import {drawContainer} from "./_core/utils";
 import AbstractScene from './AbstractScene';
 import {IRgbValue} from "./lib/interfaces";
+import {eEngineState} from "./lib/enums";
 const term = terminalKit.terminal;
-
-enum engineState {
-  stoped,
-  isRunning,
-  finished,
-}
 
 export default class Engine{
   private autoclearCounter:number=0;
   private autorun:boolean=false;
   private bgColor:IRgbValue={r:0,g:0,b:0};
-  private state: engineState = engineState.stoped;
+  private state: eEngineState = eEngineState.stoped;
   private needClear: boolean = true;
   private logBuffer:string[]=[];
   private scenes:AbstractScene[]=[];
@@ -31,22 +26,23 @@ export default class Engine{
   public getAutorun():boolean{
     return this.autorun;
   }
-  public getState():engineState{return this.state;}
+  public getScenes():AbstractScene[]{return this.scenes;}
+  public getState():eEngineState{return this.state;}
   public setAutorun(newValue:boolean){this.autorun=newValue;}
   public update(data: unknown = {}) {
     const self = this;
-    if (this.getState() !== engineState.isRunning) {
+    if (this.getState() !== eEngineState.isRunning) {
       this.autoclearCounter++;
       if (this.needClear || this.autoclearCounter>100) {
         this.autoclearCounter = 0;
         term.clear();
         drawContainer(0,0,term.width,term.height,{r:0,g:0,b:0});
       }
-      this.state = engineState.isRunning;
+      this.state = eEngineState.isRunning;
       this._updateScenesData(data).then(
         () => {
           self._drawScenes(self._validateScenes());
-          self.state = engineState.finished;
+          self.state = eEngineState.finished;
           if(this.getAutorun()){
             self.update(data);
           }
