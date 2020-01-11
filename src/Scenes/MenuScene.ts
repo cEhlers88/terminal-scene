@@ -19,6 +19,9 @@ export default class MenuScene extends AbstractScene{
         items.push(newItem);
         return this.setItems(items);
     }
+    public clearItems():MenuScene{
+        return this.setItems([]);
+    }
     public draw(): AbstractScene {
         const self = this;
         const items:IMenuitem[]=this.getItems();
@@ -42,21 +45,36 @@ export default class MenuScene extends AbstractScene{
                 });
                 self.term.moveTo(self.getDrawArea().x,self.getDrawArea().y+index).
                 bgColorRgb(bgR,bgG,bgB).
-                colorRgb(fcR,fcG,fcB,fixStringSizeValue((this.activeMenuIndex===index?'\u25c9':'\u25cb')+' '+Menuitem.text,self.getDrawArea().w))
+                colorRgb(fcR,fcG,fcB,fixStringSizeValue((this.activeMenuIndex===index?this.getIconHover():this.getIconDefault())+' '+Menuitem.text,self.getDrawArea().w))
             });
         }
         return this;
     }
+    public getIconDefault():string{
+        return this.DataHandler.getDataSave('_icon','\u25cb');
+    }
+    public getIconHover():string{
+        return this.DataHandler.getDataSave('_iconHover','\u25c9');
+    }
     public getItems():IMenuitem[]{
-        let result=this.getData('_menuitems');
-        if(!result){result=[];}
-        return result;
+        return this.DataHandler.getDataSave('_menuitems',[]);
     }
     public handleKeyDown(key: string): Promise<unknown> {
+        const self = this;
         return new Promise((resolve:()=>void)=>{
             switch(key){
-                case "DOWN": this.activeMenuIndex++; break;
-                case "UP": this.activeMenuIndex--; break;
+                case "DOWN":
+                    if(self.activeMenuIndex<self.getItems().length-1){
+                        self.activeMenuIndex++;
+                        self.EvtListener.dispatch('changed',self.activeMenuIndex);
+                    }
+                    break;
+                case "UP":
+                    if(self.activeMenuIndex>0){
+                        self.activeMenuIndex--;
+                        self.EvtListener.dispatch('changed',self.activeMenuIndex);
+                    }
+                    break;
             }
             resolve();
         });
@@ -66,6 +84,14 @@ export default class MenuScene extends AbstractScene{
     }
     public setItems(newValue:IMenuitem[]):MenuScene{
         this.setData('_menuitems',newValue);
+        return this;
+    }
+    public setIconDefault(newValue:string):MenuScene{
+        this.DataHandler.setData('_icon',newValue);
+        return this;
+    }
+    public setIconHover(newValue:string):MenuScene{
+        this.DataHandler.setData('_iconHover',newValue);
         return this;
     }
 

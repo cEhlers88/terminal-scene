@@ -10,6 +10,14 @@ class Scene extends AbstractScene{
     }
 }
 
+test('Check intitialize',()=>{
+    const SceneToTest = new Scene(11,12,13,14);
+
+    expect(SceneToTest.getDrawArea().x).toBe(11);
+    expect(SceneToTest.getDrawArea().y).toBe(12);
+    expect(SceneToTest.getDrawArea().w).toBe(13);
+    expect(SceneToTest.getDrawArea().h).toBe(14);
+});
 test('New Scenes should be visible after intitialize',()=>{
     const SceneToTest = new Scene(1,1,1,1);
     expect(SceneToTest.getIsVisible()).toBe(true);

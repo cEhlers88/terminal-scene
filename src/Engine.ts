@@ -11,6 +11,7 @@ enum engineState {
 }
 
 export default class Engine{
+  private autoclearCounter:number=0;
   private autorun:boolean=false;
   private bgColor:IRgbValue={r:0,g:0,b:0};
   private state: engineState = engineState.stoped;
@@ -35,7 +36,9 @@ export default class Engine{
   public update(data: unknown = {}) {
     const self = this;
     if (this.getState() !== engineState.isRunning) {
-      if (this.needClear) {
+      this.autoclearCounter++;
+      if (this.needClear || this.autoclearCounter>100) {
+        this.autoclearCounter = 0;
         term.clear();
         drawContainer(0,0,term.width,term.height,{r:0,g:0,b:0});
       }

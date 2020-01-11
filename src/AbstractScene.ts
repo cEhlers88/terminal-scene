@@ -1,19 +1,24 @@
+import Datahandler from "@cehlers88/ceutils/dist/Datahandler";
+import Eventhandler from "@cehlers88/ceutils/dist/Eventhandler";
 import * as terminalKit from "terminal-kit";
 import {drawContainerBox} from "./_core/utils";
 import {eBorderStyle} from "./lib/enums";
 import {IPadding, IRect, IRgbValue} from "./lib/interfaces";
 
 export default abstract class AbstractScene {
-  protected data: any = {};
-  protected dimension:IRect={x:0,y:0,w:0,h:0};
+  protected EvtListener:Eventhandler=new Eventhandler();
+  protected DataHandler:Datahandler = new Datahandler();
 
   protected readonly term:terminalKit.Terminal = terminalKit.terminal;
 
   constructor(x: number, y: number, w: number, h: number) {
-    this.dimension = {x,y,w,h};
+    this.DataHandler.setMultipleData({dimension:{x,y,w,h}});
     this.init();
   }
 
+  public addEventListener(eventName:string,listener:CallableFunction):void{
+    this.EvtListener.addListener(eventName,listener);
+  }
   public draw(): AbstractScene{
     if(this.getIsVisible()){
       drawContainerBox(this.dimension.x,this.dimension.y,this.dimension.w,this.dimension.h,{
@@ -30,8 +35,8 @@ export default abstract class AbstractScene {
   public getBorderStyle():eBorderStyle{
     return this.getData('_borderStyle',eBorderStyle.none);
   }
-  public getData(identifier:string,defaultResult:any=null):any{
-    return (this.data[identifier]!==undefined?this.data[identifier]:defaultResult);
+  public getData(key:string,defaultResult:any=null):any{
+    return this.DataHandler.getDataSave(key,defaultResult);
   }
   public getDrawArea():IRect{
     const padding=this.getPadding();
@@ -62,8 +67,8 @@ export default abstract class AbstractScene {
     this.setData('_borderStyle',newValue);
     return this;
   }
-  public setData(identifier:string,data:any):AbstractScene{
-    this.data[identifier]=data;
+  public setData(key:string,data:any):AbstractScene{
+    this.DataHandler.setData(key,data);
     return this;
   }
   public setLogHandle(handle: (message: any) => void): void {
@@ -78,7 +83,7 @@ export default abstract class AbstractScene {
     return this;
   }
   public update(data: any) {
-    return this.data;
+    return this.DataHandler.getAll();
   }
   public write(x:number,y:number,value:string):AbstractScene{
     if(this.getIsVisible()){
@@ -86,6 +91,8 @@ export default abstract class AbstractScene {
     }
     return this;
   }
-
+  protected get dimension():IRect{
+    return this.DataHandler.getDataSave('dimension',{x:-1,y:-1,w:-1,h:-1});
+  }
   private logHandle: CallableFunction = () => null;
 }
