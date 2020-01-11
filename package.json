@@ -7,7 +7,7 @@
   "scripts": {
     "start:watch": "ts-node-dev dev/watch.ts --watch",
     "build": "tsc",
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --detectOpenHandles --notify ",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",

@@ -19,7 +19,7 @@ enum eBufferDrawType {
     cronicle,
     groups
 }
-export default class extends AbstractScene {
+export default class DirectoutputScene extends AbstractScene {
     private bufferIndex:{
         ident:string,
         index:number
@@ -84,6 +84,9 @@ export default class extends AbstractScene {
     public init(): void {
         this.setBackColor({r:50,g:20,b:20})
         this.setPadding({right:1,left:1,bottom:0,top:0});
+    }
+    public get name(): string {
+        return "DirectoutputScene";
     }
 
     private drawBufferMessages(){

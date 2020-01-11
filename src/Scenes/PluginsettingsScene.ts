@@ -2,7 +2,7 @@ import MenuScene from "../Scenes/MenuScene";
 import AbstractScene from "../AbstractScene";
 import {drawContainer} from "../_core/utils";
 
-export default class extends MenuScene{
+export default class PluginsettingsScene extends MenuScene{
     constructor(x:number,y:number,w:number,h:number) {
         super(x,y,w,h);
         this.DataHandler.setMultipleData({
@@ -10,7 +10,7 @@ export default class extends MenuScene{
                 top:0,left:1,right:100,bottom:0
             }
         });
-        //this.addItem({text:'Bot erstellen'});
+
     }
     public draw(): AbstractScene {
         super.draw();
@@ -22,5 +22,9 @@ export default class extends MenuScene{
 
     public init(): void {
         this.setBackColor({r:20,g:20,b:25});
+    }
+
+    public get name():string {
+        return "PluginsettingsScene";
     }
 }
