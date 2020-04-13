@@ -1,8 +1,8 @@
-export enum eBorderStyle {
-    none,
-    normal
-}
-export enum eFillStyle {
-    none,
-    filled
+export enum eEngineState {
+    unknown,
+    stoped,
+    paused,
+    running,
+    aborted,
+    error
 }

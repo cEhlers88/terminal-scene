@@ -1,93 +1,36 @@
-import * as terminalKit from 'terminal-kit';
-import {drawContainer} from "./_core/utils";
-import AbstractScene from './AbstractScene';
-import {IRgbValue} from "./lib/interfaces";
-const term = terminalKit.terminal;
+import {eEngineState} from "./lib/enums";
+import IScene from "./Scene/IScene";
 
-enum engineState {
-  stoped,
-  isRunning,
-  finished,
-}
+export default class Engine {
 
-export default class Engine{
-  private autoclearCounter:number=0;
-  private autorun:boolean=false;
-  private bgColor:IRgbValue={r:0,g:0,b:0};
-  private state: engineState = engineState.stoped;
-  private needClear: boolean = true;
-  private logBuffer:string[]=[];
-  private scenes:AbstractScene[]=[];
+    private scenes:IScene[] = [];
 
-  private debugCount:number=0;
+    private state:eEngineState = eEngineState.unknown;
 
-  constructor() {
-    this.bindEvents();
-  }
-  public addScene(newScene:AbstractScene):Engine{
-    this.scenes.push(newScene);
-    return this;
-  }
-  public getAutorun():boolean{
-    return this.autorun;
-  }
-  public getState():engineState{return this.state;}
-  public setAutorun(newValue:boolean){this.autorun=newValue;}
-  public update(data: unknown = {}) {
-    const self = this;
-    if (this.getState() !== engineState.isRunning) {
-      this.autoclearCounter++;
-      if (this.needClear || this.autoclearCounter>100) {
-        this.autoclearCounter = 0;
-        term.clear();
-        drawContainer(0,0,term.width,term.height,{r:0,g:0,b:0});
-      }
-      this.state = engineState.isRunning;
-      this._updateScenesData(data).then(
-        () => {
-          self._drawScenes(self._validateScenes());
-          self.state = engineState.finished;
-          if(this.getAutorun()){
-            self.update(data);
-          }
-        },
-        () => {
-          this.logBuffer.push('error');
-        }
-      );
-      this.needClear = false;
+    public addScene(scene:IScene):Engine {
+        this.scenes.push(scene);
+        return this;
     }
-    this.debugCount++;
-  }
 
-  private bindEvents(){
-    const self = this;
-    term.grabInput({});
-    term.hideCursor();
-    term.on('resize',(width:number,height:number)=>{
-      self.needClear=true;
-      self.update();
-    });
-    term.on('key',(keyname:string)=>{
-      if(keyname==="CTRL_C"){process.exit();}
-      self.scenes.map((Scene:AbstractScene)=>{
-        Scene.handleKeyDown(keyname).then(self.update.bind(this));
-      });
-    });
-  }
-  private _updateScenesData(data: any): Promise<unknown> {
-    return new Promise((resolve?: CallableFunction, reject?: unknown) => {
-      if (resolve) {
-        resolve();
-      }
-    });
-  }
-  private _validateScenes(): AbstractScene[] {
-    return this.scenes;
-  }
-  private _drawScenes(Scenes: AbstractScene[]) {
-    Scenes.map((Scene: AbstractScene) => {
-      Scene.draw();
-    });
-  }
+    public pause():Engine {
+        this.state = eEngineState.paused;
+        return this;
+    }
+
+    public resume():Engine {
+        this.state = (eEngineState.paused === this.state ? eEngineState.running : this.state);
+        return this;
+    }
+
+    public run():void {
+        while(eEngineState.running === this.state || eEngineState.paused === this.state) {
+            if(eEngineState.running === this.state){
+                this.scenes.map(scene=>{
+                    if(scene.update()){scene.redraw();}
+                });
+            }
+        }
+    }
+
+
 }

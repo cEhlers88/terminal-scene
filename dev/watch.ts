@@ -1,6 +1,6 @@
-import Engine from "../src/Engine";
-import DebugScene from "../src/Scenes/DebugScene";
-import PluginlistScene from "../src/Scenes/PluginlistScene";
+import Engine from "../old_src/Engine";
+import DebugScene from "../old_src/Scenes/DebugScene";
+import PluginlistScene from "../old_src/Scenes/PluginlistScene";
 
 const EngineInstance = new Engine();
 EngineInstance.addScene(new DebugScene(1,1,1,1,));

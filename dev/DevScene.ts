@@ -1,4 +1,4 @@
-import AbstractScene from "../src/AbstractScene";
+import AbstractScene from "../old_src/AbstractScene";
 
 export default class extends AbstractScene{
     public draw(): void {
